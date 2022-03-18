@@ -1,10 +1,21 @@
 # GASchedule.py
+
 Making a Class Schedule Using a Genetic Algorithm with Python
 
 # Introduction
-Making a class schedule is one of those NP hard problems. The problem can be solved using a heuristic search algorithm to find the optimal solution, but it only works for simple cases. For more complex inputs and requirements, finding a considerably good solution can take a while, or it may be impossible. This is where genetic algorithms come in to the game. In this article, I assume that you are familiar with the basic concepts of genetic algorithms, and I won't describe them in detail because it has been done so many times before.
+
+The program should consider the size of the class for a course, the lecture hall capacity,
+and the time available to assign courses to a lecture hall for a particular time, if the
+program succeeds to assign a course, the program should print a success message. The
+program should also generate an error message to the user if he/she attempts to assign a
+class size that is more than the capacity of the hall. The program should as well generate
+an error message if the user attempt to allocate a course at a time that has already been
+allocated.
+
+Making a class schedule is one of those university hard problems. The problem can be solved using a heuristic search algorithm to find the optimal solution, but it only works for simple cases. For more complex inputs and requirements, finding a considerably good solution can take a while, or it may be impossible. This is where genetic algorithms come in to the game. In this article, I assume that you are familiar with the basic concepts of genetic algorithms, and I won't describe them in detail because it has been done so many times before.
 
 # Background
+
 When you make a class schedule, you must take into consideration many requirements (number of professors, students, classes and classrooms, size of classroom, laboratory equipment in classroom, and many others). These requirements can be divided into several groups by their importance. Hard requirements (if you break one of these, then the schedule is infeasible):
 
 A class can be placed only in a spare classroom.
@@ -19,6 +30,7 @@ Distribution (in time or space) of classes for student groups or professors.
 Hard and soft requirements, of course, depend on the situation. In this example, only hard requirements are implemented. Let's start by explaining the objects which makes a class schedule.
 
 # Objects of Class Schedule
+
 Professor
 The Professor class has an ID and the name of the professor. It also contains a list of classes that a professor teaches.
 
@@ -43,6 +55,7 @@ The result will be displayed in form of HTML table. The program would open the d
 <img src="https://i.stack.imgur.com/QDPIS.png" /></p>
 
 # Fitness
+
 Now we need to assign a fitness value to the chromosome. As I previously said, only hard requirements are used to calculate the fitness of a class schedule. This is how we do it:
 
 Each class can have 0 to 5 points.
@@ -53,16 +66,19 @@ If a professor has no other classes at the time, we increment the class's score 
 The last thing that we check is if any of the student groups that attend the class has any other class at the same time, and if they don't, we increment the score of the class.
 If a class breaks a rule at any time-space slot that it occupies, its score is not incremented for that rule.
 The total score of a class schedule is the sum of points of all classes.
-The fitness value is calculated as schedule_score/maximum_score, and maximum_score is number_of_classes*5.
+The fitness value is calculated as schedule_score/maximum_score, and maximum_score is number_of_classes\*5.
 The fitness values are represented by single-precision floating point numbers (float) in the range 0 to 1.
 
 # Crossover
+
 A crossover operation combines data in the hash maps of two parents, and then it creates a vector of slots according to the content of the new hash map. A crossover 'splits' hash maps of both parents in parts of random size. The number of parts is defined by the number of crossover points (plus one) in the chromosome's parameters. Then, it alternately copies parts form parents to the new chromosome, and forms a new list of slots.
 
 # Mutation
+
 A mutation operation is very simple. It just takes a class randomly and moves it to another randomly chosen slot. The nmber of classes which are going to be moved in a single operation is defined by the mutation size in the chromosome's parameters.
 
 # Algorithm
+
 The genetic algorithm is fairly simple. For each generation, it performs two basic operations:
 
 Randomly selects N pairs of parents from the current population and produces N new chromosomes by performing a crossover operation on the pair of parents.
@@ -70,6 +86,7 @@ Randomly selects N chromosomes from the current population and replaces them wit
 And, these two operations are repeated until the best chromosome reaches a fitness value equal to 1 (meaning that all classes in the schedule meet the requirement). As mentioned before, the genetic algorithm keeps track of the M best chromosomes in the population, and guarantees that they are not going to be replaced while they are among the best chromosomes.
 
 # Configuration JSON File
+
 Types of objects:
 
 professor - describes a professor.<br />
@@ -102,7 +119,9 @@ lab (boolean, optional) - if the class requires computers in a room; if not spec
 Note that the professor, students group, and course objects must be defined before they are bound to a course class object.
 
 <img src="https://i.stack.imgur.com/QDPIS.png" /></p>
+
 # How to call this api
+
 If you are using Python, you would call GASchedule as follows:
 
 ```python
